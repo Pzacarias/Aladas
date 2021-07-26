@@ -14,7 +14,7 @@ public class Pasaje {
     private Integer pasajeId;
 
     @OneToOne
-    @JoinColumn (name = "reserva_id", referencedColumnName = "pasaje_id")
+    @JoinColumn (name = "reserva_id", referencedColumnName = "reserva_id")
     private Reserva reserva;
 
     @Column (name = "fecha_emision")
