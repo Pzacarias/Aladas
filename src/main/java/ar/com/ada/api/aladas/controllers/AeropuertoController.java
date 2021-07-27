@@ -26,6 +26,6 @@ public class AeropuertoController {
         respuesta.isOk = true;
         respuesta.message = "Se creo el aeropuerto correctamente";
 
-        return ResponseEntity.ok(respuesta)
+        return ResponseEntity.ok(respuesta);
     }
 }

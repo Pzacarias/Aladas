@@ -44,7 +44,7 @@ public class Vuelo {
 
 
 
-    @OneToMany(mappedBy = "pasajero", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "vuelo", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Reserva> reservas = new ArrayList <>();
 
     public Integer getVueloId() {
