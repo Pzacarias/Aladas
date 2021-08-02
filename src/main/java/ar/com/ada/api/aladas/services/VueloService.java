@@ -6,8 +6,8 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ar.com.ada.api.aladas.entities.Aeropuerto;
-import ar.com.ada.api.aladas.entities.Vuelo;
+import ar.com.ada.api.aladas.entities.*;
+import ar.com.ada.api.aladas.entities.Vuelo.EstadoVueloEnum;
 import ar.com.ada.api.aladas.repos.VueloRepository;
 
 @Service
@@ -20,7 +20,10 @@ public class VueloService {
     private AeropuertoService aeroService;
 
     public void crear(Vuelo vuelo) {
+
+        vuelo.setEstadoVueloId(EstadoVueloEnum.GENERADO);
         repo.save(vuelo);
+
     }
 
     public Vuelo crear(Date fecha, Integer capacidad, String aeropuertoOrigenIATA, String aeropuertoDestinoIATA,
@@ -69,7 +72,7 @@ public class VueloService {
     }
 
     public boolean validarAeropuertoOrigenDiffDestino(Vuelo vuelo) {
-       
+
         return vuelo.getAeropuertoDestino() != vuelo.getAeropuertoOrigen();
 
     }

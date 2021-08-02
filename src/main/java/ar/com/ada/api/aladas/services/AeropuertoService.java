@@ -32,4 +32,23 @@ public class AeropuertoService {
     public Aeropuerto buscarPorCodigoIATA(String codigoIATA){
         return repo.findByCodigoIATA(codigoIATA);
     }
+
+    public boolean validarCodigoIATA(Aeropuerto aeropuerto) {
+
+        if (aeropuerto.getCodigoIATA().length() != 3)
+            return false;
+
+        String codigoIATA = aeropuerto.getCodigoIATA();
+
+        for (int i = 0; i < codigoIATA.length(); i++) {
+            char c = codigoIATA.charAt(i);
+
+            if (!(c >= 'A' && c <= 'Z'))
+                return false;
+
+        }
+
+        return true;
+
+    }
 }
