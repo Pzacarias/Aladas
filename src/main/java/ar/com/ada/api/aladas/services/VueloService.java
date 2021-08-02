@@ -65,14 +65,14 @@ public class VueloService {
         if (vuelo.getPrecio() == null) {
             return false;
         }
-        if (vuelo.getPrecio().doubleValue() < 0)
+        if (vuelo.getPrecio().doubleValue() > 0)
             return true;
 
         return false;
     }
 
     public boolean validarAeropuertoOrigenDiffDestino(Vuelo vuelo) {
-
+     
         return vuelo.getAeropuertoDestino() != vuelo.getAeropuertoOrigen();
 
     }
