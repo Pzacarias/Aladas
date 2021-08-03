@@ -9,8 +9,11 @@ import ar.com.ada.api.aladas.entities.Vuelo;
 import ar.com.ada.api.aladas.models.response.GenericResponse;
 import ar.com.ada.api.aladas.services.AeropuertoService;
 import ar.com.ada.api.aladas.services.VueloService;
+import ar.com.ada.api.aladas.models.request.EstadoVueloRequest;
 
 import static ar.com.ada.api.aladas.services.VueloService.ValidacionVueloDataEnum;
+
+import java.util.List;
 
 @RestController
 public class VueloController {
@@ -47,5 +50,26 @@ public class VueloController {
 
     }
 
-   
+    @PutMapping("/api/vuelos/{id}/estados")
+    public ResponseEntity<GenericResponse> putActualizarEstadoVuelo(@PathVariable Integer id,
+            @RequestBody EstadoVueloRequest estadoVuelo) {
+
+        GenericResponse r = new GenericResponse();
+
+        Vuelo vuelo = service.buscarPorId(id);
+        vuelo.setEstadoVueloId(estadoVuelo.estado);
+        service.actualizar(vuelo);
+
+        r.isOk = true;
+        r.message = "actualizado";
+        
+        return ResponseEntity.ok(r);
+    }
+
+    @GetMapping("/api/vuelos/abiertos")
+    public ResponseEntity<List<Vuelo>> getVuelosAbiertos(){
+        
+        return ResponseEntity.ok(service.traerVuelosAbiertos());
+    }
+
 }
