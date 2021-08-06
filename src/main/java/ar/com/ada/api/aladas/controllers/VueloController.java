@@ -61,7 +61,7 @@ public class VueloController {
         service.actualizar(vuelo);
 
         r.isOk = true;
-        r.message = "actualizado";
+        r.message = "El estado ha sido actualizado";
         
         return ResponseEntity.ok(r);
     }

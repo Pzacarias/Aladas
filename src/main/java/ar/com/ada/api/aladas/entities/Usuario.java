@@ -7,34 +7,33 @@ import javax.persistence.*;
 import org.hibernate.annotations.NaturalId;
 
 @Entity
-@Table (name = "usuario")
+@Table(name = "usuario")
 public class Usuario {
 
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
-    @Column (name = "usuario_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "usuario_id")
     private Integer usuarioId;
 
     @NaturalId
     private String username;
-    
-    @Column (name = "password")
+
     private String password;
 
     private String email;
 
-    @Column (name = "fecha_login")
+    @Column(name = "fecha_login")
     private Date fechaLogin;
 
-    @Column (name = "tipo_usuario_id")
+    @Column(name = "tipo_usuario_id")
     private Integer tipoUsuario;
-    
+
     @OneToOne
-    @JoinColumn (name = "staff_id",referencedColumnName = "staff_id")
+    @JoinColumn(name = "staff_id", referencedColumnName = "staff_id")
     private Staff staff;
-    
+
     @OneToOne
-    @JoinColumn (name = "pasajero_id",referencedColumnName = "pasajero_id")
+    @JoinColumn(name = "pasajero_id", referencedColumnName = "pasajero_id")
     private Pasajero pasajero;
 
     public Integer getUsuarioId() {
@@ -77,11 +76,11 @@ public class Usuario {
         this.fechaLogin = fechaLogin;
     }
 
-    public TipoEstadoEnum getTipoUsuario() {
-        return TipoEstadoEnum.parse(this.tipoUsuario);
+    public TipoUsuarioEnum getTipoUsuario() {
+        return TipoUsuarioEnum.parse(this.tipoUsuario);
     }
 
-    public void setTipoUsuario(TipoEstadoEnum tipoUsuario) {
+    public void setTipoUsuario(TipoUsuarioEnum tipoUsuario) {
         this.tipoUsuario = tipoUsuario.getValue();
     }
 
@@ -99,15 +98,21 @@ public class Usuario {
 
     public void setPasajero(Pasajero pasajero) {
         this.pasajero = pasajero;
+
     }
 
-    public enum TipoEstadoEnum {
+    public Integer obtenerEntityId() {
+        // TODO, segun el tipo de usuario, devolver el pasajeroId o staffId o nada!
+        return null;
+    }
+
+    public enum TipoUsuarioEnum {
         STAFF(1), PASAJERO(2);
 
         private final Integer value;
 
         // NOTE: Enum constructor tiene que estar en privado
-        private TipoEstadoEnum(Integer value) {
+        private TipoUsuarioEnum(Integer value) {
             this.value = value;
         }
 
@@ -115,9 +120,9 @@ public class Usuario {
             return value;
         }
 
-        public static TipoEstadoEnum parse(Integer id) {
-            TipoEstadoEnum status = null; // Default
-            for (TipoEstadoEnum item : TipoEstadoEnum.values()) {
+        public static TipoUsuarioEnum parse(Integer id) {
+            TipoUsuarioEnum status = null; // Default
+            for (TipoUsuarioEnum item : TipoUsuarioEnum.values()) {
                 if (item.getValue().equals(id)) {
                     status = item;
                     break;
@@ -126,4 +131,5 @@ public class Usuario {
             return status;
         }
     }
+
 }
