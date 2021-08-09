@@ -82,9 +82,6 @@ public class UsuarioService {
 
         staffService.crearStaff(staff);
         break;
-
-      default:
-        break;
     }
     return usuario;
   }
