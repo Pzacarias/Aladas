@@ -102,7 +102,14 @@ public class Usuario {
     }
 
     public Integer obtenerEntityId() {
-        // TODO, segun el tipo de usuario, devolver el pasajeroId o staffId o nada!
+        switch (this.getTipoUsuario()) {
+            case PASAJERO:
+                return this.getPasajero().getPasajeroId();
+            case STAFF:
+                return this.getStaff().getStaffId();
+            default:
+                break;
+        }
         return null;
     }
 

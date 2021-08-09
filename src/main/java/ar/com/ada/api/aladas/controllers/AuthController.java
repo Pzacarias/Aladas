@@ -45,8 +45,8 @@ public class AuthController {
 
         // aca creamos la persona y el usuario a traves del service.
 
-        Usuario usuario = usuarioService.crearUsuario(req.userType, req.fullName, req.country, req.identificationType,
-                req.identification,  req.email, req.password);
+        Usuario usuario = usuarioService.crearUsuario(req.userType, req.fullName, req.country, req.birthDate,
+                req.identificationType, req.identification, req.email, req.password);
 
         r.isOk = true;
         r.message = "Te registraste con exitoooo!!!!!!!";
@@ -85,7 +85,5 @@ public class AuthController {
         r.token = token;
 
         return ResponseEntity.ok(r);
-
     }
-
 }
