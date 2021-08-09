@@ -21,6 +21,8 @@ public class AeropuertoController {
         
         GenericResponse respuesta = new GenericResponse ();
 
+        if(service.validarAeropuertoExiste(aeropuerto.getAeropuertoId()) == false){
+
         service.crear(aeropuerto.getAeropuertoId(), aeropuerto.getNombre(), aeropuerto.getCodigoIATA());
 
         respuesta.isOk = true;
@@ -28,5 +30,13 @@ public class AeropuertoController {
         respuesta.id = aeropuerto.getAeropuertoId();
 
         return ResponseEntity.ok(respuesta);
+        }
+        
+        else {
+        respuesta.isOk = false;
+        respuesta.message="El aeropuerto que quiere crear ya existe";
+
+        return ResponseEntity.badRequest().body(respuesta);
+        }
     }
 }

@@ -25,7 +25,7 @@ public class AeropuertoService {
 }
 
     public List<Aeropuerto> obtenerTodos() {
-        return repo.findAll();
+        return repo.findAll(); 
         
     }
 
@@ -51,4 +51,15 @@ public class AeropuertoService {
         return true;
 
     }
+
+    public boolean validarAeropuertoExiste(Integer aeropuertoId){
+        Aeropuerto aeropuerto = repo.findByAeropuertoId(aeropuertoId);
+        if (aeropuerto != null){
+            return true;
+        }
+        else return false;
+       
+    }    
+
+
 }
