@@ -40,7 +40,7 @@ public class UsuarioService {
 
     Usuario u = buscarPorUsername(username);
 
-    if (u == null || !u.getPassword().equals(Crypto.encrypt(password, u.getUsername()))) {
+    if (u == null || !u.getPassword().equals(Crypto.encrypt(password, u.getEmail().toLowerCase()))) {
 
       throw new BadCredentialsException("Usuario o contraseña invalida");
     }

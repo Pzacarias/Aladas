@@ -73,8 +73,8 @@ public class VueloService {
     }
 
     public boolean validarAeropuertoOrigenDiffDestino(Vuelo vuelo) {
-     
-        return vuelo.getAeropuertoDestino() != vuelo.getAeropuertoOrigen();
+
+        return vuelo.getAeropuertoDestino().intValue() != vuelo.getAeropuertoOrigen().intValue();
 
     }
 

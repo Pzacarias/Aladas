@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ar.com.ada.api.aladas.entities.Aeropuerto;
 import ar.com.ada.api.aladas.models.response.GenericResponse;
 import ar.com.ada.api.aladas.services.AeropuertoService;
+import ar.com.ada.api.aladas.services.AeropuertoService.ValidacionAeropuertoDataEnum;
 
 @RestController
 public class AeropuertoController {
@@ -21,8 +22,9 @@ public class AeropuertoController {
         
         GenericResponse respuesta = new GenericResponse ();
 
-        if(service.validarAeropuertoExiste(aeropuerto.getAeropuertoId()) == false){
-
+        ValidacionAeropuertoDataEnum resultado = service.validar(aeropuerto);
+    
+        if(resultado == ValidacionAeropuertoDataEnum.OK){
         service.crear(aeropuerto.getAeropuertoId(), aeropuerto.getNombre(), aeropuerto.getCodigoIATA());
 
         respuesta.isOk = true;
@@ -34,7 +36,7 @@ public class AeropuertoController {
         
         else {
         respuesta.isOk = false;
-        respuesta.message="El aeropuerto que quiere crear ya existe";
+        respuesta.message = "Error(" + resultado.toString() + ")";
 
         return ResponseEntity.badRequest().body(respuesta);
         }

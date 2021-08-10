@@ -59,7 +59,22 @@ public class AeropuertoService {
         }
         else return false;
        
-    }    
+    }  
+
+    public enum ValidacionAeropuertoDataEnum {
+        OK, ERROR_AEROPUERTO_YA_EXISTE, ERROR_CODIGO_IATA,
+    }
+
+    public ValidacionAeropuertoDataEnum validar(Aeropuerto aeropuerto) {
+
+        if(validarAeropuertoExiste(aeropuerto.getAeropuertoId()))
+            return ValidacionAeropuertoDataEnum.ERROR_AEROPUERTO_YA_EXISTE;
+
+        if(!validarCodigoIATA(aeropuerto))
+            return ValidacionAeropuertoDataEnum.ERROR_CODIGO_IATA;
+        
+        return ValidacionAeropuertoDataEnum.OK;
+    }
 
 
 }
