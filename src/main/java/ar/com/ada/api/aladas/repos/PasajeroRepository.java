@@ -8,4 +8,5 @@ import ar.com.ada.api.aladas.entities.Pasajero;
 @Repository
 public interface PasajeroRepository extends JpaRepository<Pasajero,Integer> {
     
+    Pasajero findByPasajeroId(Integer id);
 }
