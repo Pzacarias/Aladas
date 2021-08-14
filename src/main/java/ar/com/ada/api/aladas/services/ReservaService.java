@@ -49,5 +49,9 @@ public class ReservaService {
         repo.save(reserva);
         return reserva.getReservaId();
     }
+    
+    public Reserva buscarPorId(Integer id) {
+        return repo.findByReservaId(id);
+    }
 
 }

@@ -85,16 +85,15 @@ public class Reserva {
         return pasaje;
     }
 
-    public void setPasaje(Pasaje pasaje) { //Relacion bidireccion a traves el
-     this.pasaje = pasaje; 
-     pasaje.setReserva(this);
+    public void setPasaje(Pasaje pasaje) { // Relacion bidireccion a traves el setter
+        this.pasaje = pasaje;
+        pasaje.setReserva(this);
     }
-     
-
 
     public enum EstadoReservaEnum {
 
-        CREADA(1), TRANSMITIENDO_AL_PG(2), ERROR_AL_CONECTAR_PG(3), PENDIENTE_DE_PAGO(4), PAGADA(5), CANCELADO_POR_USUARIO(6), CANCELADO_POR_EMPRESA(7), PAGO_RECHAZADO(8), EXPIRADO(9), EMITIDA(10);        
+        CREADA(1), TRANSMITIENDO_AL_PG(2), ERROR_AL_CONECTAR_PG(3), PENDIENTE_DE_PAGO(4), PAGADA(5),
+        CANCELADO_POR_USUARIO(6), CANCELADO_POR_EMPRESA(7), PAGO_RECHAZADO(8), EXPIRADO(9), EMITIDA(10);
 
         private final Integer value;
 

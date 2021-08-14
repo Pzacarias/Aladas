@@ -35,7 +35,7 @@ public class ReservaController {
 
         rta.id = numeroReserva;
         rta.isOk = true;
-        rta.message = "Reserva creada";
+        rta.message = "Reserva creada con éxito.";
 
         return ResponseEntity.ok(rta);
 

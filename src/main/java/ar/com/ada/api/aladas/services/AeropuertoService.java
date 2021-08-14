@@ -14,22 +14,22 @@ public class AeropuertoService {
     @Autowired
     private AeropuertoRepository repo;
 
-    public void crear(Integer aeropuertoId, String nombre, String codigoIATA){
-    
-    Aeropuerto aeropuerto = new Aeropuerto();
-    aeropuerto.setAeropuertoId(aeropuertoId);
-    aeropuerto.setNombre(nombre);
-    aeropuerto.setCodigoIATA(codigoIATA);
+    public void crear(Integer aeropuertoId, String nombre, String codigoIATA) {
 
-    repo.save(aeropuerto);
-}
+        Aeropuerto aeropuerto = new Aeropuerto();
+        aeropuerto.setAeropuertoId(aeropuertoId);
+        aeropuerto.setNombre(nombre);
+        aeropuerto.setCodigoIATA(codigoIATA);
 
-    public List<Aeropuerto> obtenerTodos() {
-        return repo.findAll(); 
-        
+        repo.save(aeropuerto);
     }
 
-    public Aeropuerto buscarPorCodigoIATA(String codigoIATA){
+    public List<Aeropuerto> obtenerTodos() {
+        return repo.findAll();
+
+    }
+
+    public Aeropuerto buscarPorCodigoIATA(String codigoIATA) {
         return repo.findByCodigoIATA(codigoIATA);
     }
 
@@ -52,14 +52,14 @@ public class AeropuertoService {
 
     }
 
-    public boolean validarAeropuertoExiste(Integer aeropuertoId){
+    public boolean validarAeropuertoExiste(Integer aeropuertoId) {
         Aeropuerto aeropuerto = repo.findByAeropuertoId(aeropuertoId);
-        if (aeropuerto != null){
+        if (aeropuerto != null) {
             return true;
-        }
-        else return false;
-       
-    }  
+        } else
+            return false;
+
+    }
 
     public enum ValidacionAeropuertoDataEnum {
         OK, ERROR_AEROPUERTO_YA_EXISTE, ERROR_CODIGO_IATA,
@@ -67,14 +67,30 @@ public class AeropuertoService {
 
     public ValidacionAeropuertoDataEnum validar(Aeropuerto aeropuerto) {
 
-        if(validarAeropuertoExiste(aeropuerto.getAeropuertoId()))
+        if (validarAeropuertoExiste(aeropuerto.getAeropuertoId()))
             return ValidacionAeropuertoDataEnum.ERROR_AEROPUERTO_YA_EXISTE;
 
-        if(!validarCodigoIATA(aeropuerto))
+        if (!validarCodigoIATA(aeropuerto))
             return ValidacionAeropuertoDataEnum.ERROR_CODIGO_IATA;
-        
+
         return ValidacionAeropuertoDataEnum.OK;
     }
 
+    public boolean validarTraerPorCodigoIata(String codigoIATA) {
+        if (this.buscarPorCodigoIATA(codigoIATA) == null) {
+            return false;
+        }
+        return true;
+    }
 
+    public boolean validarTraerPorId (Integer id){
+        if (repo.findByAeropuertoId(id) == null){
+            return false;
+        }
+        return true;
+    }
+
+    public Aeropuerto buscarPorAeropuertoId(Integer id) {
+        return repo.findByAeropuertoId(id);
+    }
 }
