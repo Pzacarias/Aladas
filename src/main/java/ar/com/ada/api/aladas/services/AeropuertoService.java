@@ -33,12 +33,9 @@ public class AeropuertoService {
         return repo.findByCodigoIATA(codigoIATA);
     }
 
-    public boolean validarCodigoIATA(Aeropuerto aeropuerto) {
-
-        if (aeropuerto.getCodigoIATA().length() != 3)
+    public boolean validarIATA(String codigoIATA) {
+        if (codigoIATA.length() != 3)
             return false;
-
-        String codigoIATA = aeropuerto.getCodigoIATA();
 
         for (int i = 0; i < codigoIATA.length(); i++) {
             char c = codigoIATA.charAt(i);
@@ -47,11 +44,9 @@ public class AeropuertoService {
                 return false;
 
         }
-
         return true;
-
     }
-
+    
     public boolean validarAeropuertoExiste(Integer aeropuertoId) {
         Aeropuerto aeropuerto = repo.findByAeropuertoId(aeropuertoId);
         if (aeropuerto != null) {
@@ -70,7 +65,7 @@ public class AeropuertoService {
         if (validarAeropuertoExiste(aeropuerto.getAeropuertoId()))
             return ValidacionAeropuertoDataEnum.ERROR_AEROPUERTO_YA_EXISTE;
 
-        if (!validarCodigoIATA(aeropuerto))
+        if (!validarIATA(aeropuerto.getCodigoIATA()))
             return ValidacionAeropuertoDataEnum.ERROR_CODIGO_IATA;
 
         return ValidacionAeropuertoDataEnum.OK;
@@ -83,8 +78,8 @@ public class AeropuertoService {
         return true;
     }
 
-    public boolean validarTraerPorId (Integer id){
-        if (repo.findByAeropuertoId(id) == null){
+    public boolean validarTraerPorId(Integer id) {
+        if (repo.findByAeropuertoId(id) == null) {
             return false;
         }
         return true;
@@ -92,5 +87,28 @@ public class AeropuertoService {
 
     public Aeropuerto buscarPorAeropuertoId(Integer id) {
         return repo.findByAeropuertoId(id);
+    }
+
+    public void modificarAeropuerto(Integer id, String nombreNuevo, String nuevoCodigoIATA) {
+        Aeropuerto aeropuerto = this.buscarPorAeropuertoId(id);
+        aeropuerto.setCodigoIATA(nuevoCodigoIATA);
+        aeropuerto.setNombre(nombreNuevo);
+        repo.save(aeropuerto);
+    }
+
+    public ValidacionModificacionAeropuertoEnum validarModificarAeropuertoPorId(Integer id, String nombreNuevo,
+            String nuevoCodigoIATA) {
+        if (nombreNuevo .length() == 0) {
+            return ValidacionModificacionAeropuertoEnum.ERROR_NOMBRE_VACIO;
+        }
+        if (!validarIATA(nuevoCodigoIATA))
+            return ValidacionModificacionAeropuertoEnum.ERROR_CODIGO_IATA;
+
+        return ValidacionModificacionAeropuertoEnum.OK;
+    }
+
+
+    public enum ValidacionModificacionAeropuertoEnum {
+        ERROR_NOMBRE_VACIO, ERROR_CODIGO_IATA, OK
     }
 }
