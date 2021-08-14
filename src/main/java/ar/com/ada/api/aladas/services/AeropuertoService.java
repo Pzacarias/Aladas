@@ -111,4 +111,8 @@ public class AeropuertoService {
     public enum ValidacionModificacionAeropuertoEnum {
         ERROR_NOMBRE_VACIO, ERROR_CODIGO_IATA, OK
     }
+
+    public void eliminarAeropuertoPorId(Integer id) {
+        repo.deleteById(id);
+    }
 }

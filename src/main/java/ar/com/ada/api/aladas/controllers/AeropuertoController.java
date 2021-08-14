@@ -65,7 +65,7 @@ public class AeropuertoController {
         GenericResponse respuesta = new GenericResponse();
         if (!service.validarTraerPorId(id)) {
             respuesta.isOk = false;
-            respuesta.message = "El codigo ingresado no es correcto.";
+            respuesta.message = "El número de Id ingresado no es correcto.";
             return ResponseEntity.badRequest().body(respuesta);
         }
         return ResponseEntity.ok(service.buscarPorAeropuertoId(id));
@@ -74,39 +74,47 @@ public class AeropuertoController {
     @PutMapping("/aeropuertos/{id}")
     public ResponseEntity<GenericResponse> modificar(@PathVariable Integer id,
             @RequestBody InfoAeropuertoNuevo infoAeropuerto) {
-            
-                GenericResponse respuesta = new GenericResponse();
-
-                ValidacionModificacionAeropuertoEnum resultado = service.validarModificarAeropuertoPorId(id, infoAeropuerto.nombreNuevo, infoAeropuerto.nuevoCodigoIATA);
-        
-                if (resultado == ValidacionModificacionAeropuertoEnum.OK) {
-                    service.modificarAeropuerto(id, infoAeropuerto.nombreNuevo, infoAeropuerto.nuevoCodigoIATA);
-        
-                    respuesta.isOk = true;
-                    respuesta.message = "Se actualizó el aeropuerto correctamente.";
-        
-                    return ResponseEntity.ok(respuesta);
-                }
-        
-                else {
-                    respuesta.isOk = false;
-                    respuesta.message = "Error(" + resultado.toString() + ")";
-        
-                    return ResponseEntity.badRequest().body(respuesta);
-                }
-            }
-    }
-/*
-    @DeleteMapping("/aeropuertos/{id}")
-    public ResponseEntity<GenericResponse> eliminarPregunta(@PathVariable Integer id) {
-        service.eliminarPreguntaPorId(id);
 
         GenericResponse respuesta = new GenericResponse();
-        respuesta.isOk = true;
-        respuesta.message = "La pregunta fue eliminada correctamente.";
 
-        return ResponseEntity.ok(respuesta);
+        ValidacionModificacionAeropuertoEnum resultado = service.validarModificarAeropuertoPorId(id,
+                infoAeropuerto.nombreNuevo, infoAeropuerto.nuevoCodigoIATA);
+
+        if (resultado == ValidacionModificacionAeropuertoEnum.OK) {
+            service.modificarAeropuerto(id, infoAeropuerto.nombreNuevo, infoAeropuerto.nuevoCodigoIATA);
+
+            respuesta.isOk = true;
+            respuesta.message = "Se actualizó el aeropuerto correctamente.";
+
+            return ResponseEntity.ok(respuesta);
+        }
+
+        else {
+            respuesta.isOk = false;
+            respuesta.message = "Error(" + resultado.toString() + ")";
+
+            return ResponseEntity.badRequest().body(respuesta);
+        }
     }
 
+
+    @DeleteMapping ("/api/aeropuertos/{id}")
+    public ResponseEntity<?> eliminar(@PathVariable Integer id){
+       
+        GenericResponse respuesta = new GenericResponse();
+        if (service.validarAeropuertoExiste(id)) {
+            service.eliminarAeropuertoPorId(id);
+            respuesta.isOk = true;
+            respuesta.message = "El aeropuerto ha sido eliminado correctamente.";
+            return ResponseEntity.ok(respuesta);
+            
+        }
+        else {
+            respuesta.isOk = false;
+            respuesta.message = "El número de Id ingresado no es correcto.";
+            return ResponseEntity.badRequest().body(respuesta);
+          
+        }
+
+    }
 }
-*/
