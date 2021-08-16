@@ -63,13 +63,13 @@ public class VueloController {
         r.isOk = true;
         r.message = "El estado ha sido actualizado";
         r.id = vuelo.getVueloId();
-        
+
         return ResponseEntity.ok(r);
     }
 
     @GetMapping("/api/vuelos/abiertos")
-    public ResponseEntity<List<Vuelo>> getVuelosAbiertos(){
-        
+    public ResponseEntity<List<Vuelo>> getVuelosAbiertos() {
+
         return ResponseEntity.ok(service.traerVuelosAbiertos());
     }
 
@@ -89,25 +89,50 @@ public class VueloController {
         return ResponseEntity.ok(service.buscarPorId(id));
     }
 
-    @DeleteMapping ("/api/vuelos/{id}")
-    public ResponseEntity<?> eliminar(@PathVariable Integer id){
-       
+    @DeleteMapping("/api/vuelos/{id}")
+    public ResponseEntity<?> eliminar(@PathVariable Integer id) {
+
         GenericResponse respuesta = new GenericResponse();
         if (service.validarVueloExiste(id)) {
             service.eliminarVueloPorId(id);
             respuesta.isOk = true;
             respuesta.message = "El vuelo ha sido eliminado correctamente.";
             return ResponseEntity.ok(respuesta);
-            
-        }
-        else {
+
+        } else {
             respuesta.isOk = false;
             respuesta.message = "El número de Id del vuelo ingresado no es correcto.";
             return ResponseEntity.badRequest().body(respuesta);
-          
+
         }
-        
-        
+
+    }
+
+    @PutMapping("api/vuelos/{id}")
+    public ResponseEntity<GenericResponse> modificar(@PathVariable Integer id, @RequestBody Vuelo vuelo) {
+
+        GenericResponse respuesta = new GenericResponse();
+
+        ValidacionVueloDataEnum resultadoValidacion = service.validar(vuelo);
+
+        if (resultadoValidacion == ValidacionVueloDataEnum.OK) {
+
+            service.modificarVuelo(vuelo.getFecha(), vuelo.getCapacidad(), vuelo.getAeropuertoOrigen(),
+                    vuelo.getAeropuertoDestino(), vuelo.getPrecio(), vuelo.getCodigoMoneda(), id);
+
+            respuesta.isOk = true;
+            respuesta.message = "El vuelo ha sido modificado correctamente.";
+            respuesta.id = id;
+
+            return ResponseEntity.ok(respuesta);
+        }
+
+        else {
+            respuesta.isOk = false;
+            respuesta.message = "Error(" + resultadoValidacion.toString() + ")";
+
+            return ResponseEntity.badRequest().body(respuesta);
+        }
     }
 
 }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import ar.com.ada.api.aladas.entities.*;
 import ar.com.ada.api.aladas.entities.Vuelo.EstadoVueloEnum;
 import ar.com.ada.api.aladas.repos.VueloRepository;
+import ar.com.ada.api.aladas.services.ReservaService.ValidacionReservaDataEnum;
 
 @Service
 public class VueloService {
@@ -33,6 +34,7 @@ public class VueloService {
         Vuelo vuelo = new Vuelo();
         vuelo.setFecha(fecha);
         vuelo.setCapacidad(capacidad);
+        vuelo.setEstadoVueloId(EstadoVueloEnum.GENERADO);
 
         Aeropuerto aeropuertoOrigen = aeroService.buscarPorCodigoIATA(aeropuertoOrigenIATA);
 
@@ -58,18 +60,60 @@ public class VueloService {
         if (!validarAeropuertoOrigenDiffDestino(vuelo))
             return ValidacionVueloDataEnum.ERROR_AEROPUERTOS_IGUALES;
 
+        if (!validarAeropuertoExiste(vuelo.getAeropuertoOrigen()))
+            return ValidacionVueloDataEnum.ERROR_AEROPUERTO_ORIGEN_NO_EXISTE;
+
+        if (!validarAeropuertoExiste(vuelo.getAeropuertoDestino()))
+            return ValidacionVueloDataEnum.ERROR_AEROPUERTO_DESTINO_NO_EXISTE;
+
+        if (!validarCapacidadMinima(vuelo))
+            return ValidacionVueloDataEnum.ERROR_CAPACIDAD_MINIMA;
+
+        if (!validarCapacidadMaxima(vuelo))
+            return ValidacionVueloDataEnum.ERROR_CAPACIDAD_MAXIMA;
+        
+        
         return ValidacionVueloDataEnum.OK;
+
+    }
+
+    public boolean validarAeropuertoExiste(Integer id) {
+        if (aeroService.buscarPorAeropuertoId(id) != null) {
+            return true;
+        } else
+            return false;
+
     }
 
     public boolean validarPrecio(Vuelo vuelo) {
 
-        if (vuelo.getPrecio() == null) {
+        if (vuelo.getPrecio() == null)
             return false;
-        }
+
         if (vuelo.getPrecio().doubleValue() > 0)
             return true;
-
         return false;
+
+    }
+
+    public boolean validarCapacidadMinima(Vuelo vuelo) {
+
+        // Boeing 737 
+
+        if (vuelo.getCapacidad() < 85) {
+            return false;
+        }
+        return true;
+    }
+
+    public boolean validarCapacidadMaxima(Vuelo vuelo) {
+
+        // Airbus 380 con clase Business y First Class
+
+        if (vuelo.getCapacidad() > 500) {
+            return false;
+        }
+        return true;
     }
 
     public boolean validarAeropuertoOrigenDiffDestino(Vuelo vuelo) {
@@ -79,8 +123,9 @@ public class VueloService {
     }
 
     public enum ValidacionVueloDataEnum {
-        OK, ERROR_PRECIO, ERROR_AEROPUERTO_ORIGEN, ERROR_AEROPUERTO_DESTINO, ERROR_FECHA, ERROR_MONEDA,
-        ERROR_CAPACIDAD_MINIMA, ERROR_CAPACIDAD_MAXIMA, ERROR_AEROPUERTOS_IGUALES, ERROR_GENERAL,
+        OK, ERROR_PRECIO, ERROR_AEROPUERTO_ORIGEN_NO_EXISTE, ERROR_AEROPUERTO_DESTINO_NO_EXISTE, ERROR_FECHA,
+        ERROR_MONEDA, ERROR_CAPACIDAD_MINIMA, ERROR_CAPACIDAD_MAXIMA, ERROR_AEROPUERTOS_IGUALES, ERROR_GENERAL
+
     }
 
     public Vuelo buscarPorId(Integer id) {
@@ -101,14 +146,28 @@ public class VueloService {
     }
 
     public boolean validarVueloExiste(Integer id) {
-        if (buscarPorId(id)!= null) {
+        if (buscarPorId(id) != null) {
             return true;
         } else
             return false;
 
-    } 
+    }
 
     public void eliminarVueloPorId(Integer id) {
         repo.deleteById(id);
+    }
+
+    public Vuelo modificarVuelo(Date fecha, Integer capacidad, Integer aeropuertoOrigen, Integer aeropuertoDestino,
+            BigDecimal precio, String codigoMoneda, Integer id) {
+        Vuelo vuelo = buscarPorId(id);
+        vuelo.setFecha(fecha);
+        vuelo.setCapacidad(capacidad);
+        vuelo.setAeropuertoOrigen(aeropuertoOrigen);
+        vuelo.setAeropuertoDestino(aeropuertoDestino);
+        vuelo.setPrecio(precio);
+        vuelo.setCodigoMoneda(codigoMoneda);
+
+        return repo.save(vuelo);
+
     }
 }
