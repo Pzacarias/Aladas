@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import ar.com.ada.api.aladas.entities.*;
 import ar.com.ada.api.aladas.entities.Vuelo.EstadoVueloEnum;
 import ar.com.ada.api.aladas.repos.VueloRepository;
-import ar.com.ada.api.aladas.services.ReservaService.ValidacionReservaDataEnum;
 
 @Service
 public class VueloService {

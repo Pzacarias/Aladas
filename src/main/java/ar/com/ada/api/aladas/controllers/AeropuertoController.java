@@ -99,7 +99,7 @@ public class AeropuertoController {
 
 
     @DeleteMapping ("/api/aeropuertos/{id}")
-    public ResponseEntity<?> eliminar(@PathVariable Integer id){
+    public ResponseEntity<GenericResponse> eliminar(@PathVariable Integer id){
        
         GenericResponse respuesta = new GenericResponse();
         if (service.validarAeropuertoExiste(id)) {

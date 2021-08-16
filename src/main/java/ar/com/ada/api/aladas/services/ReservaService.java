@@ -91,7 +91,7 @@ public class ReservaService {
             return false;
     }
 
-    public void modificarReserva(Integer id) {
+    public Reserva modificarReserva(Integer id) {
         Reserva reserva = this.buscarPorId(id);
         Vuelo vuelo = vueloService.buscarPorId(id);
         reserva.setVuelo(vuelo);
@@ -103,7 +103,7 @@ public class ReservaService {
 
         reserva.setFechaVencimiento(c.getTime());
        
-        repo.save(reserva);
+        return repo.save(reserva);
     }
 
     public void eliminarReservaPorId(Integer id) {

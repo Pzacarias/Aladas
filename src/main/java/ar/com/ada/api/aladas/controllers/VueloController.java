@@ -1,10 +1,8 @@
 package ar.com.ada.api.aladas.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import ar.com.ada.api.aladas.entities.Aeropuerto;
 import ar.com.ada.api.aladas.entities.Vuelo;
 import ar.com.ada.api.aladas.models.response.GenericResponse;
 import ar.com.ada.api.aladas.services.AeropuertoService;
@@ -90,7 +88,7 @@ public class VueloController {
     }
 
     @DeleteMapping("/api/vuelos/{id}")
-    public ResponseEntity<?> eliminar(@PathVariable Integer id) {
+    public ResponseEntity<GenericResponse> eliminar(@PathVariable Integer id) {
 
         GenericResponse respuesta = new GenericResponse();
         if (service.validarVueloExiste(id)) {

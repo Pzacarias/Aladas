@@ -27,8 +27,9 @@ public class ReservaController {
     UsuarioService usuarioService;
 
     @PostMapping("/api/reservas")
-    public ResponseEntity<ReservaResponse> generarReserva(@RequestBody InfoReservaNueva infoReserva) {
+    public ResponseEntity<?> generarReserva(@RequestBody InfoReservaNueva infoReserva) {
         ReservaResponse rta = new ReservaResponse();
+        
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
@@ -48,9 +49,11 @@ public class ReservaController {
             return ResponseEntity.ok(rta);
 
         } else {
-            rta.message = "Error(" + resultado.toString() + ")";
+            GenericResponse respuesta = new GenericResponse();
+            respuesta.isOk = false;
+            respuesta.message = "Error(" + resultado.toString() + ")";
 
-            return ResponseEntity.badRequest().body(rta);
+            return ResponseEntity.badRequest().body(respuesta);
         }
 
     }
@@ -72,34 +75,37 @@ public class ReservaController {
     }
 
     @PutMapping("/reservas/{id}")
-    public ResponseEntity<GenericResponse> modificar(@PathVariable Integer id,
+    public ResponseEntity<?> modificar(@PathVariable Integer id,
             @RequestBody InfoReservaNueva infoNueva) {
 
-        GenericResponse respuesta = new GenericResponse();
-
+        ReservaResponse respuesta = new ReservaResponse();
+      
         ValidacionReservaDataEnum resultado = service.validar(infoNueva.vueloId);
 
         if (resultado == ValidacionReservaDataEnum.OK) {
             
-            service.modificarReserva(id);
+            Reserva reserva = service.modificarReserva(id);
 
-            respuesta.isOk = true;
+            respuesta.id = reserva.getReservaId();
+            respuesta.fechaDeEmision = reserva.getFechaEmision();
+            respuesta.fechaDeVencimiento = reserva.getFechaVencimiento();
             respuesta.message = "El vuelo de la reserva ha sido modificado correctamente.";
 
             return ResponseEntity.ok(respuesta);
         }
 
         else {
-            respuesta.isOk = false;
-            respuesta.message = "Error(" + resultado.toString() + ")";
+            GenericResponse rta = new GenericResponse();
+            rta.isOk = false;
+            rta.message = "Error(" + resultado.toString() + ")";
 
-            return ResponseEntity.badRequest().body(respuesta);
+            return ResponseEntity.badRequest().body(rta);
         }
     }
 
 
     @DeleteMapping ("/api/reservas/{id}")
-    public ResponseEntity<?> eliminar(@PathVariable Integer id){
+    public ResponseEntity<GenericResponse> eliminar(@PathVariable Integer id){
        
         GenericResponse respuesta = new GenericResponse();
         if (service.validarReservaExiste(id)) {
