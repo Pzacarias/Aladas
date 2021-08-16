@@ -57,7 +57,7 @@ public class AeropuertoService {
     }
 
     public enum ValidacionAeropuertoDataEnum {
-        OK, ERROR_AEROPUERTO_YA_EXISTE, ERROR_CODIGO_IATA,
+        OK, ERROR_AEROPUERTO_YA_EXISTE, ERROR_CODIGO_IATA
     }
 
     public ValidacionAeropuertoDataEnum validar(Aeropuerto aeropuerto) {

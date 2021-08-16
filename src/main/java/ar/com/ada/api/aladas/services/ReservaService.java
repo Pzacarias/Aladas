@@ -10,6 +10,7 @@ import ar.com.ada.api.aladas.entities.Pasajero;
 import ar.com.ada.api.aladas.entities.Reserva;
 import ar.com.ada.api.aladas.entities.Vuelo;
 import ar.com.ada.api.aladas.entities.Reserva.EstadoReservaEnum;
+import ar.com.ada.api.aladas.entities.Vuelo.EstadoVueloEnum;
 import ar.com.ada.api.aladas.repos.ReservaRepository;
 
 @Service
@@ -24,7 +25,7 @@ public class ReservaService {
     @Autowired
     PasajeroService pasajeroService;
 
-    public Integer generarReserva(Integer vueloId, Integer pasajeroId) {
+    public Reserva generarReserva(Integer vueloId, Integer pasajeroId) {
 
         Reserva reserva = new Reserva();
 
@@ -46,12 +47,34 @@ public class ReservaService {
         pasajero.agregarReserva(reserva);
         vuelo.agregarReserva(reserva);
 
-        repo.save(reserva);
-        return reserva.getReservaId();
+        return repo.save(reserva);
     }
-    
+
     public Reserva buscarPorId(Integer id) {
         return repo.findByReservaId(id);
     }
 
+    public enum ValidacionReservaDataEnum {
+        OK, ERROR_VUELO_NO_EXISTE, ERROR_VUELO_NO_ABIERTO
+    }
+
+    public ValidacionReservaDataEnum validar(Integer vueloId) {
+        if (!vueloService.validarVueloExiste(vueloId))
+            return ValidacionReservaDataEnum.ERROR_VUELO_NO_EXISTE;
+
+        if (!validarVueloAbierto(vueloId))
+            return ValidacionReservaDataEnum.ERROR_VUELO_NO_ABIERTO;
+
+        return ValidacionReservaDataEnum.OK;
+
+    }
+
+    public boolean validarVueloAbierto(Integer id) {
+        Vuelo vuelo = vueloService.buscarPorId(id);
+        if (vuelo.getEstadoVueloId().equals(EstadoVueloEnum.ABIERTO)) {
+            return true;
+        }
+        return false;
+
+    }
 }

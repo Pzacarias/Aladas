@@ -100,13 +100,6 @@ public class VueloService {
         return repo.findAll();
     }
 
-    public boolean validarTraerPorId(Integer id) {
-        if (repo.findByVueloId(id) == null) {
-            return false;
-        }
-        return true;
-    }
-
     public boolean validarVueloExiste(Integer id) {
         if (buscarPorId(id)!= null) {
             return true;
