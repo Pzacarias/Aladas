@@ -1,12 +1,12 @@
 package ar.com.ada.api.aladas.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import ar.com.ada.api.aladas.entities.Reserva;
 import ar.com.ada.api.aladas.entities.Usuario;
@@ -53,6 +53,70 @@ public class ReservaController {
             return ResponseEntity.badRequest().body(rta);
         }
 
+    }
+
+    @GetMapping("/api/reservas")
+    public ResponseEntity<List<Reserva>> traerReservas() {
+        return ResponseEntity.ok(service.obtenerTodas());
+    }
+
+    @GetMapping("api/reservas/{id}")
+    public ResponseEntity<?> traerReservasPorId(@PathVariable Integer id) {
+        GenericResponse respuesta = new GenericResponse();
+        if (!service.validarReservaExiste(id)) {
+            respuesta.isOk = false;
+            respuesta.message = "El número de Id ingresado no es correcto.";
+            return ResponseEntity.badRequest().body(respuesta);
+        }
+        return ResponseEntity.ok(service.buscarPorId(id));
+    }
+
+    @PutMapping("/reservas/{id}")
+    public ResponseEntity<GenericResponse> modificar(@PathVariable Integer id,
+            @RequestBody InfoReservaNueva infoNueva) {
+
+        GenericResponse respuesta = new GenericResponse();
+
+        ValidacionReservaDataEnum resultado = service.validar(infoNueva.vueloId);
+
+        if (resultado == ValidacionReservaDataEnum.OK) {
+            
+            service.modificarReserva(id);
+
+            respuesta.isOk = true;
+            respuesta.message = "El vuelo de la reserva ha sido modificado correctamente.";
+
+            return ResponseEntity.ok(respuesta);
+        }
+
+        else {
+            respuesta.isOk = false;
+            respuesta.message = "Error(" + resultado.toString() + ")";
+
+            return ResponseEntity.badRequest().body(respuesta);
+        }
+    }
+
+
+    @DeleteMapping ("/api/reservas/{id}")
+    public ResponseEntity<?> eliminar(@PathVariable Integer id){
+       
+        GenericResponse respuesta = new GenericResponse();
+        if (service.validarReservaExiste(id)) {
+            service.eliminarReservaPorId(id);
+            respuesta.isOk = true;
+            respuesta.message = "El aeropuerto ha sido eliminado correctamente.";
+            return ResponseEntity.ok(respuesta);
+            
+        }
+        else {
+            respuesta.isOk = false;
+            respuesta.message = "El número de Id ingresado no es correcto.";
+            return ResponseEntity.badRequest().body(respuesta);
+          
+        }
+        
+        
     }
 
 }

@@ -62,6 +62,7 @@ public class VueloController {
 
         r.isOk = true;
         r.message = "El estado ha sido actualizado";
+        r.id = vuelo.getVueloId();
         
         return ResponseEntity.ok(r);
     }
@@ -73,12 +74,12 @@ public class VueloController {
     }
 
     @GetMapping("/api/vuelos")
-    public ResponseEntity<List<Vuelo>> traerAeropuertos() {
+    public ResponseEntity<List<Vuelo>> traerVuelos() {
         return ResponseEntity.ok(service.obtenerTodos());
     }
 
     @GetMapping("api/vuelos/{id}")
-    public ResponseEntity<?> traerAeropueroPorId(@PathVariable Integer id) {
+    public ResponseEntity<?> traerVueloPorId(@PathVariable Integer id) {
         GenericResponse respuesta = new GenericResponse();
         if (!service.validarVueloExiste(id)) {
             respuesta.isOk = false;

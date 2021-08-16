@@ -4,6 +4,8 @@ import java.util.*;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "pasajero")
 public class Pasajero extends Persona {
@@ -14,9 +16,11 @@ public class Pasajero extends Persona {
     private Integer pasajeroId;
 
     @OneToMany(mappedBy = "pasajero", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Reserva> reservas = new ArrayList<>();
 
     @OneToOne (mappedBy = "pasajero", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnore
     private Usuario usuario;
 
     public Integer getPasajeroId() {

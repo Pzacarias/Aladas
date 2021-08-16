@@ -63,7 +63,7 @@ public class AeropuertoController {
     @GetMapping("api/aeropuertos/id/{id}")
     public ResponseEntity<?> traerAeropueroPorId(@PathVariable Integer id) {
         GenericResponse respuesta = new GenericResponse();
-        if (!service.validarTraerPorId(id)) {
+        if (!service.validarAeropuertoExiste(id)) {
             respuesta.isOk = false;
             respuesta.message = "El número de Id ingresado no es correcto.";
             return ResponseEntity.badRequest().body(respuesta);

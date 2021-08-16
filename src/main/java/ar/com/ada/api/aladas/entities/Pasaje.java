@@ -4,6 +4,8 @@ import java.util.Date;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table (name = "pasaje")
 public class Pasaje {
@@ -15,6 +17,7 @@ public class Pasaje {
 
     @OneToOne
     @JoinColumn (name = "reserva_id", referencedColumnName = "reserva_id")
+    @JsonIgnore
     private Reserva reserva;
 
     @Column (name = "fecha_emision")

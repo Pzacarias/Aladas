@@ -78,12 +78,6 @@ public class AeropuertoService {
         return true;
     }
 
-    public boolean validarTraerPorId(Integer id) {
-        if (repo.findByAeropuertoId(id) == null) {
-            return false;
-        }
-        return true;
-    }
 
     public Aeropuerto buscarPorAeropuertoId(Integer id) {
         return repo.findByAeropuertoId(id);
