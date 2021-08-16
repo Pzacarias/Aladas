@@ -84,7 +84,6 @@ public class VueloService {
     }
 
     public Vuelo buscarPorId(Integer id) {
-
         return repo.findByVueloId(id);
 
     }
@@ -95,5 +94,28 @@ public class VueloService {
 
     public List<Vuelo> traerVuelosAbiertos() {
         return repo.findByEstadoVueloId(EstadoVueloEnum.ABIERTO.getValue());
+    }
+
+    public List<Vuelo> obtenerTodos() {
+        return repo.findAll();
+    }
+
+    public boolean validarTraerPorId(Integer id) {
+        if (repo.findByVueloId(id) == null) {
+            return false;
+        }
+        return true;
+    }
+
+    public boolean validarVueloExiste(Integer id) {
+        if (buscarPorId(id)!= null) {
+            return true;
+        } else
+            return false;
+
+    } 
+
+    public void eliminarVueloPorId(Integer id) {
+        repo.deleteById(id);
     }
 }

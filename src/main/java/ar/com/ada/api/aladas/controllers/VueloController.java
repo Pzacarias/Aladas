@@ -72,4 +72,41 @@ public class VueloController {
         return ResponseEntity.ok(service.traerVuelosAbiertos());
     }
 
+    @GetMapping("/api/vuelos")
+    public ResponseEntity<List<Vuelo>> traerAeropuertos() {
+        return ResponseEntity.ok(service.obtenerTodos());
+    }
+
+    @GetMapping("api/vuelos/{id}")
+    public ResponseEntity<?> traerAeropueroPorId(@PathVariable Integer id) {
+        GenericResponse respuesta = new GenericResponse();
+        if (!service.validarTraerPorId(id)) {
+            respuesta.isOk = false;
+            respuesta.message = "El número de Id del vuelo ingresado no es correcto.";
+            return ResponseEntity.badRequest().body(respuesta);
+        }
+        return ResponseEntity.ok(service.buscarPorId(id));
+    }
+
+    @DeleteMapping ("/api/vuelos/{id}")
+    public ResponseEntity<?> eliminar(@PathVariable Integer id){
+       
+        GenericResponse respuesta = new GenericResponse();
+        if (service.validarVueloExiste(id)) {
+            service.eliminarVueloPorId(id);
+            respuesta.isOk = true;
+            respuesta.message = "El vuelo ha sido eliminado correctamente.";
+            return ResponseEntity.ok(respuesta);
+            
+        }
+        else {
+            respuesta.isOk = false;
+            respuesta.message = "El número de Id del vuelo ingresado no es correcto.";
+            return ResponseEntity.badRequest().body(respuesta);
+          
+        }
+        
+        
+    }
+
 }
