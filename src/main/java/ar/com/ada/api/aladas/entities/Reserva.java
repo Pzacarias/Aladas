@@ -21,6 +21,7 @@ public class Reserva {
     @JoinColumn(name = "pasajero_id", referencedColumnName = "pasajero_id")
     private Pasajero pasajero;
 
+    @Transient 
     @OneToOne(mappedBy = "reserva", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Pasaje pasaje;
 
@@ -85,6 +86,7 @@ public class Reserva {
         return pasaje;
     }
 
+    
     public void setPasaje(Pasaje pasaje) { // Relacion bidireccion a traves el setter
         this.pasaje = pasaje;
         pasaje.setReserva(this);
