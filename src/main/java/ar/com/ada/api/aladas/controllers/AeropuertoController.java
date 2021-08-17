@@ -71,7 +71,7 @@ public class AeropuertoController {
         return ResponseEntity.ok(service.buscarPorAeropuertoId(id));
     }
 
-    @PutMapping("/aeropuertos/{id}")
+    @PutMapping("/api/aeropuertos/{id}")
     public ResponseEntity<GenericResponse> modificar(@PathVariable Integer id,
             @RequestBody InfoAeropuertoNuevo infoAeropuerto) {
 
