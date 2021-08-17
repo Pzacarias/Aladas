@@ -28,10 +28,11 @@ public class PasajeService {
 
         Pasaje pasaje = new Pasaje();
         pasaje.setFechaEmision(new Date());
-
+        pasaje.setInfoPago("PAGADO");
         Reserva reserva = resService.buscarPorId(reservaId);
         reserva.setEstadoReservaId(EstadoReservaEnum.EMITIDA);
         reserva.setPasaje(pasaje);
+
         Integer nuevaCapacidad = reserva.getVuelo().getCapacidad() - 1;
         reserva.getVuelo().setCapacidad(nuevaCapacidad);
 
@@ -51,7 +52,7 @@ public class PasajeService {
 
    
     public enum ValidacionPasajeDataEnum {
-        OK, ERROR_CAPACIDAD_MAXIMA_ALCANZADA, ERROR_RESERVA_NO_EXISTE
+        OK, ERROR_CAPACIDAD_MAXIMA_ALCANZADA, ERROR_RESERVA_NO_EXISTE, ERROR_RESERVA_YA_TIENE__UN_PASAJE
     }
 
     public ValidacionPasajeDataEnum validar(Integer reservaId) {
@@ -63,7 +64,20 @@ public class PasajeService {
         if (!validadCapacidadDisponible(reserva.getVuelo().getCapacidad()))
             return ValidacionPasajeDataEnum.ERROR_CAPACIDAD_MAXIMA_ALCANZADA;
 
+        if(!validarReservaYaTieneUnPasajeAsignado(reservaId))
+            return ValidacionPasajeDataEnum.ERROR_RESERVA_YA_TIENE_UN_PASAJE;
+
         return ValidacionPasajeDataEnum.OK;
+
+    }
+
+    public boolean validarReservaYaTieneUnPasajeAsignado (Integer id){
+        Reserva reserva = resService.buscarPorId(id);
+
+        if (reserva.getPasaje() != null) {
+            return true;
+        } else
+            return false;
 
     }
 

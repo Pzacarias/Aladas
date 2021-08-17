@@ -42,7 +42,7 @@ public class PasajeController {
             respuesta.reservaId = pasaje.getReserva().getReservaId();
             respuesta.vueloId = pasaje.getReserva().getVuelo().getVueloId();
             respuesta.infoDePago = "PAGADO";
-            respuesta.message = "El pasaje ha sido modificado correctamente.";
+            respuesta.message = "El pasaje ha sido emitido correctamente.";
 
             return ResponseEntity.ok(respuesta);
 
@@ -71,6 +71,7 @@ public class PasajeController {
         }
         return ResponseEntity.ok(service.buscarPorId(id));
     }
+
 
     @PutMapping("/api/pasajes/{id}")
     public ResponseEntity<?> modificar(@PathVariable Integer id, @RequestBody InfoPasajeNuevo infoNueva) {
