@@ -52,7 +52,7 @@ public class PasajeService {
 
    
     public enum ValidacionPasajeDataEnum {
-        OK, ERROR_CAPACIDAD_MAXIMA_ALCANZADA, ERROR_RESERVA_NO_EXISTE, ERROR_RESERVA_YA_TIENE__UN_PASAJE
+        OK, ERROR_CAPACIDAD_MAXIMA_ALCANZADA, ERROR_RESERVA_NO_EXISTE, ERROR_RESERVA_YA_TIENE_UN_PASAJE
     }
 
     public ValidacionPasajeDataEnum validar(Integer reservaId) {
