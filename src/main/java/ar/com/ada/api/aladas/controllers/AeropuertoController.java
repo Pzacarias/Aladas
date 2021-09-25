@@ -22,7 +22,8 @@ public class AeropuertoController {
         ValidacionAeropuertoDataEnum resultado = service.validar(aeropuerto);
 
         if (resultado == ValidacionAeropuertoDataEnum.OK) {
-            service.crear(aeropuerto.getAeropuertoId(), aeropuerto.getNombre(), aeropuerto.getCodigoIATA());
+
+            service.crear(aeropuerto);
 
             respuesta.isOk = true;
             respuesta.message = "Se creo el aeropuerto correctamente";

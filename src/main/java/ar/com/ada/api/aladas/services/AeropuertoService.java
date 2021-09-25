@@ -9,22 +9,10 @@ import ar.com.ada.api.aladas.entities.Aeropuerto;
 import ar.com.ada.api.aladas.repos.AeropuertoRepository;
 
 @Service
-public class AeropuertoService {
+public class AeropuertoService extends Servicio<Aeropuerto, Integer>  {
 
-    @Autowired
-    private AeropuertoRepository repo;
 
-    // El crear este tiene que pasarle como parametro el aeropuertoId porque
-    // en ESTE caso no es autoincremental.
-    public void crear(Integer aeropuertoId, String nombre, String codigoIATA) {
 
-        Aeropuerto aeropuerto = new Aeropuerto(); // declaran e instancian
-        aeropuerto.setAeropuertoId(aeropuertoId);
-        aeropuerto.setNombre(nombre);
-        aeropuerto.setCodigoIATA(codigoIATA);
-
-        repo.save(aeropuerto);
-    }
 
     public List<Aeropuerto> obtenerTodos() {
 
@@ -33,7 +21,7 @@ public class AeropuertoService {
     }
 
     public Aeropuerto buscarPorCodigoIATA(String codigoIATA) {
-        return repo.findByCodigoIATA(codigoIATA);
+        return ((AeropuertoRepository)repo).findByCodigoIATA(codigoIATA);
     }
 
     public boolean validarCodigoIATA(Aeropuerto aeropuerto) {
@@ -57,7 +45,7 @@ public class AeropuertoService {
     }
 
     public boolean validarAeropuertoExiste(Integer aeropuertoId) {
-        Aeropuerto aeropuerto = repo.findByAeropuertoId(aeropuertoId);
+        Aeropuerto aeropuerto = ((AeropuertoRepository)repo).findByAeropuertoId(aeropuertoId);
         if (aeropuerto != null) {
             return true;
         } else
@@ -79,5 +67,7 @@ public class AeropuertoService {
 
         return ValidacionAeropuertoDataEnum.OK;
     }
+
+    
 
 }
