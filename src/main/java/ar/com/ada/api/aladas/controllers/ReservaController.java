@@ -11,6 +11,7 @@ import ar.com.ada.api.aladas.entities.Reserva;
 import ar.com.ada.api.aladas.entities.Usuario;
 import ar.com.ada.api.aladas.models.request.InfoReservaNueva;
 import ar.com.ada.api.aladas.models.response.GenericResponse;
+import ar.com.ada.api.aladas.models.response.ReservaGenerationResponse;
 import ar.com.ada.api.aladas.services.ReservaService;
 import ar.com.ada.api.aladas.services.UsuarioService;
 
@@ -23,8 +24,8 @@ public class ReservaController {
     UsuarioService usuarioService;
 
     @PostMapping("/api/reservas")
-    public ResponseEntity<GenericResponse> generarReserva(@RequestBody InfoReservaNueva infoReserva) {
-        GenericResponse rta = new GenericResponse();
+    public ResponseEntity<ReservaGenerationResponse> generarReserva(@RequestBody InfoReservaNueva infoReserva) {
+        ReservaGenerationResponse rta = new ReservaGenerationResponse();
 
         // Obtengo a quien esta autenticado del otro lado
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -36,11 +37,7 @@ public class ReservaController {
         Usuario usuario = usuarioService.buscarPorUsername(username);
 
         // con el usuario, obtengo el pasajero, y con ese, obtengo el Id
-        Integer numeroReserva = service.generarReserva(infoReserva.vueloId, usuario.getPasajero().getPasajeroId());
-
-        rta.id = numeroReserva;
-        rta.isOk = true;
-        rta.message = "Reserva creada";
+        rta = service.generarReservaConLinkDePago(infoReserva.vueloId, usuario.getPasajero().getPasajeroId());
 
         return ResponseEntity.ok(rta);
 

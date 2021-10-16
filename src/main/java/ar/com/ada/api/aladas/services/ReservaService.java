@@ -10,7 +10,9 @@ import ar.com.ada.api.aladas.entities.Pasajero;
 import ar.com.ada.api.aladas.entities.Reserva;
 import ar.com.ada.api.aladas.entities.Vuelo;
 import ar.com.ada.api.aladas.entities.Reserva.EstadoReservaEnum;
+import ar.com.ada.api.aladas.models.response.ReservaGenerationResponse;
 import ar.com.ada.api.aladas.repos.ReservaRepository;
+import ar.com.ada.api.aladas.sistema.payments.MercadoPagoService;
 
 @Service
 public class ReservaService {
@@ -23,6 +25,9 @@ public class ReservaService {
 
     @Autowired
     PasajeroService pasajeroService;
+
+    @Autowired
+    MercadoPagoService mercadoPagoService;
 
     public Integer generarReserva(Integer vueloId, Integer pasajeroId) {
 
@@ -50,7 +55,20 @@ public class ReservaService {
         return reserva.getReservaId();
     }
 
-       public Reserva buscarPorId(Integer id) {
+    public ReservaGenerationResponse generarReservaConLinkDePago(Integer vueloId, Integer pasajeroId) {
+
+        ReservaGenerationResponse r = new ReservaGenerationResponse();
+        //1ro generar la reserva:
+        Integer reservaId = generarReserva(vueloId, pasajeroId);
+
+        //2do decirle  MP que genere una preferencia de pago.
+        Reserva reserva = repo.findByReservaId(reservaId);
+        r = mercadoPagoService.generarPreferenciaParaReserva(reserva);
+
+        return r;
+    }
+
+    public Reserva buscarPorId(Integer id) {
         return repo.findByReservaId(id);
     }
 
