@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -39,9 +41,22 @@ public class AuthController {
 
     // Auth : authentication ->
     @PostMapping("api/auth/register")
-    public ResponseEntity<RegistrationResponse> postRegisterUser(@RequestBody RegistrationRequest req,
+    public ResponseEntity<RegistrationResponse> postRegisterUser(@Valid @RequestBody RegistrationRequest req,
             BindingResult results) {
         RegistrationResponse r = new RegistrationResponse();
+
+        //Revisamos si hubo errores
+        if (results.hasErrors()){ //has = tiene
+            r.isOk = false;
+            r.message = "Hubo errores al recibir el request";
+            //recorrer cada error, crear una instancia de ErrorItemInfo y agregarlo a r.errores
+            results.getFieldErrors().stream().forEach(e -> {
+                r.errors.add(new ErrorItemInfo(e.getField(), e.getDefaultMessage()));
+            });
+
+            //bad request
+            return ResponseEntity.badRequest().body(r);
+        }
 
         // aca creamos la persona y el usuario a traves del service.
 
